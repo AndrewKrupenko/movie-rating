@@ -1,6 +1,18 @@
-import { StarIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/24/solid";
 
-export default function MovieItem({ movie }) {
+export default function MovieItem({ movie, onRemove, onUpdateRating, onEdit }) {
+  const handleUpdateRating = (rating) => {
+    onUpdateRating(movie.id, rating);
+  };
+
+  const handleRemoveMovie = () => {
+    onRemove(movie.id);
+  };
+
+  const editMovie = () => {
+    onEdit(movie.id);
+  };
+
   return (
     <div className="movie-item group">
       <div className="movie-item-image-wrapper">
@@ -24,7 +36,16 @@ export default function MovieItem({ movie }) {
           <span className="movie-item-rating-text">
             Rating: {movie.rating || 0}/5
           </span>
-          <StarRating rating={movie.rating} movieName={movie.name} />
+          <StarRating
+            rating={movie.rating}
+            movieName={movie.name}
+            onUpdateRating={handleUpdateRating}
+          />
+          <MovieActions
+            movieName={movie.name}
+            onEdit={editMovie}
+            onRemove={handleRemoveMovie}
+          />
         </div>
       </div>
     </div>
@@ -74,7 +95,7 @@ function GenreTag({ genre }) {
   return <span className="movie-item-genre-tag">{genre}</span>;
 }
 
-function StarRating({ rating, movieName }) {
+function StarRating({ rating, movieName, onUpdateRating }) {
   return (
     <div className="movie-item-star-icon-wrapper">
       {[1, 2, 3, 4, 5].map((star) => (
@@ -88,10 +109,32 @@ function StarRating({ rating, movieName }) {
               ? "text-yellow-500"
               : "text-gray-400 hover:text-yellow-300"
           }`}
+          onClick={() => onUpdateRating(star)}
         >
           <StarIcon className="movie-item-star-icon" />
         </button>
       ))}
+    </div>
+  );
+}
+
+function MovieActions({ movieName, onEdit, onRemove }) {
+  return (
+    <div className="movie-item-actions-list-wrapper">
+      <button
+        aria-label={`Edit ${movieName}`}
+        className="movie-item-action-edit-button"
+        onClick={onEdit}
+      >
+        <PencilIcon className="movie-item-action-icon" />
+      </button>
+      <button
+        aria-label={`Remove ${movieName}`}
+        className="movie-item-action-remove-button"
+        onClick={onRemove}
+      >
+        <TrashIcon className="movie-item-action-icon" />
+      </button>
     </div>
   );
 }
