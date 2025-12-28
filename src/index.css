@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+h1 {
+  @apply text-3xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+h5 {
+  @apply text-base;
+}
+h6 {
+  @apply text-sm;
+}
+p {
+  @apply text-base;
+}
+a {
+  @apply text-blue-500 underline;
+}
+input,
+textarea,
+select {
+  @apply border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150;
+}
+
+.btn {
+  @apply py-2 px-4 rounded-lg transition-all duration-200 font-medium focus:outline-none focus:ring-2;
+}
+
+.btn-secondary {
+  @apply bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 focus:ring-blue-400;
+}
+
+.btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-400 hover:shadow-md;
+}
+
+.app {
+  @apply flex flex-col items-center justify-start gap-8 p-6 min-h-screen bg-gray-50;
+}
+
+.movie-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-7xl px-6 pb-8;
+}
+
+.movie-item {
+  @apply w-full bg-white rounded-xl flex flex-col overflow-hidden shadow-md hover:shadow-lg transition-all duration-200;
+}
+
+.movie-item-image-wrapper {
+  @apply h-80 overflow-hidden w-full relative;
+}
+
+.movie-item-content-wrapper {
+  @apply flex-1 p-5 flex flex-col gap-3;
+}
+
+.movie-item-title-wrapper {
+  @apply flex-shrink-0;
+}
+
+.movie-item-title {
+  @apply text-lg font-semibold truncate mb-3 text-gray-900;
+}
+
+.movie-item-genres-wrapper {
+  @apply flex items-center gap-1 flex-wrap;
+}
+
+.movie-item-genre-tag {
+  @apply text-xs bg-blue-500 text-white py-1 px-3 rounded-full font-medium;
+}
+
+.movie-item-description-wrapper {
+  @apply flex-1 overflow-hidden;
+}
+
+.movie-item-description {
+  @apply text-sm text-gray-600 leading-relaxed;
+}
+
+.movie-item-rating-wrapper {
+  @apply flex items-center justify-between gap-3 mt-auto pt-2;
+}
+
+.movie-item-rating-text {
+  @apply text-xs text-gray-500 whitespace-nowrap font-medium;
+}
+
+.movie-item-star-icon-wrapper {
+  @apply flex gap-1 flex-1;
+}
+
+.movie-item-star-icon {
+  @apply h-4 w-4 cursor-pointer transition-colors;
+}
+
+.movie-item-star-icon-button {
+  @apply transition-all duration-150 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-sm;
+}
