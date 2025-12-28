@@ -138,3 +138,25 @@ function MovieActions({ movieName, onEdit, onRemove }) {
     </div>
   );
 }
+
+export function MovieItemSkeleton() {
+  return (
+    <div className="movie-item">
+      <div className="movie-item-image-wrapper">
+        <div className="movie-item-image bg-gray-300 animate-pulse" />
+      </div>
+      <div className="movie-item-content-wrapper">
+        <div className="movie-item-title-wrapper">
+          <div className="skeleton" />
+          <div className="skeleton w-2/3" />
+        </div>
+        <div className="movie-item-description-wrapper">
+          <div className="skeleton" />
+        </div>
+        <div className="movie-item-rating-wrapper">
+          <div className="skeleton w-20" />
+        </div>
+      </div>
+    </div>
+  );
+}

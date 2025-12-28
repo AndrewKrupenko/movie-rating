@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { ALL_MOVIES } from "./data/movies";
-import MovieItem from "./components/MovieItem";
+import MovieItem, { MovieItemSkeleton } from "./components/MovieItem";
 import Modal from "./components/ui/Modal";
 import MovieForm from "./components/MovieForm";
+import { getMovies } from "./services/movies-service";
 
 export default function App() {
-  const [movies, setMovies] = useState(ALL_MOVIES.items);
+  const [movies, setMovies] = useState([]);
   const [currentMovie, setCurrentMovie] = useState(null);
   const [showMovieForm, setShowMovieForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const validRatings = movies
     .filter((movie) => Number.isFinite(movie.rating))
@@ -20,6 +21,15 @@ export default function App() {
       ).toFixed(1)
     : "N/A";
   const totalMovies = movies.length;
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const movies = await getMovies();
+      setMovies(movies);
+      setIsLoading(false);
+    };
+    fetchMovies();
+  }, []);
 
   const updateRating = (id, rating) => {
     setMovies((prevMovies) =>
@@ -118,8 +128,13 @@ export default function App() {
         </div>
       </div>
       <div className="movie-list">
-        {movies.map((movie) => {
-          return (
+        {isLoading ? (
+          <>
+            <MovieItemSkeleton />
+            <MovieItemSkeleton />
+          </>
+        ) : (
+          movies.map((movie) => (
             <MovieItem
               key={movie.id}
               movie={movie}
@@ -127,8 +142,8 @@ export default function App() {
               onRemove={removeMovie}
               onUpdateRating={updateRating}
             />
-          );
-        })}
+          ))
+        )}
       </div>
     </div>
   );

@@ -42,6 +42,10 @@ select {
   @apply bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-400 hover:shadow-md;
 }
 
+.skeleton {
+  @apply h-4 m-2 bg-gray-200 animate-pulse rounded-lg;
+}
+
 .app {
   @apply flex flex-col items-center justify-start gap-8 p-6 min-h-screen bg-gray-50;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const genres = [
   "Drama",
@@ -23,6 +23,8 @@ const validateField = (name, value) => {
 };
 
 export default function MovieForm({ movie, onSave, onCancel }) {
+  const nameInputRef = useRef(null);
+
   const [formData, setFormData] = useState({
     id: movie?.id || null,
     name: movie?.name || "",
@@ -33,6 +35,12 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     rating: movie?.rating || null,
   });
   const [errors, setErrors] = useState({ name: "", genres: "" });
+
+  useEffect(() => {
+    if (nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,7 +77,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
   const handleGenresChange = (e) => {
     const selectedOptions = Array.from(
       e.target.selectedOptions,
-      (option) => option.value
+      (option) => option.value,
     );
 
     setFormData((prev) => ({
@@ -90,6 +98,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
             Name
           </label>
           <input
+            ref={nameInputRef}
             type="text"
             name="name"
             value={formData.name}
