@@ -58,6 +58,46 @@ select {
   @apply h-80 overflow-hidden w-full relative;
 }
 
+.movie-item-image {
+  @apply object-cover object-center w-full h-full transition-transform duration-200 group-hover:scale-105;
+}
+
+.movie-item-no-image {
+  @apply h-full absolute inset-0 w-full bg-gray-100 flex items-center justify-center;
+}
+
+.movie-item-no-image-text {
+  @apply text-xl text-gray-400 font-medium;
+}
+
+.movie-item-star-wrapper {
+  @apply absolute top-3 right-3 z-10;
+}
+
+.movie-item-star-content-wrapper {
+  @apply absolute inset-0 flex items-center justify-center text-center;
+}
+
+.movie-item-star-rating-icon {
+  @apply h-12 w-12 drop-shadow-lg;
+}
+
+.movie-item-star-content-rating-rated {
+  @apply text-lg text-yellow-900 font-bold drop-shadow-sm;
+}
+
+.movie-item-star-content-rating-not-rated {
+  @apply text-lg text-gray-200 drop-shadow-sm;
+}
+
+.movie-item-theaters-banner {
+  @apply absolute top-3 left-3 bg-gradient-to-r from-red-600 to-red-500 text-white z-10 rounded-full px-3 py-1 shadow-sm flex items-center;
+}
+
+.movie-item-theaters-banner-text {
+  @apply text-xs font-bold text-center;
+}
+
 .movie-item-content-wrapper {
   @apply flex-1 p-5 flex flex-col gap-3;
 }
