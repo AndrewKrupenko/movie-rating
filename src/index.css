@@ -42,8 +42,12 @@ select {
   @apply bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-400 hover:shadow-md;
 }
 
-.skeleton {
-  @apply h-4 m-2 bg-gray-200 animate-pulse rounded-lg;
+.tag {
+  @apply text-xs bg-blue-500 text-white py-1 px-3 rounded-full font-medium;
+}
+
+.tag-large {
+  @apply text-sm bg-blue-500 text-white py-2 px-4 rounded-full font-medium;
 }
 
 .app {
@@ -188,8 +192,8 @@ select {
   @apply flex items-center gap-1 flex-wrap;
 }
 
-.movie-item-genre-tag {
-  @apply text-xs bg-blue-500 text-white py-1 px-3 rounded-full font-medium;
+.movie-item-title-link {
+  @apply text-black transition-colors no-underline hover:underline;
 }
 
 .movie-item-description-wrapper {
@@ -238,4 +242,40 @@ select {
 
 .movie-item-action-icon {
   @apply w-4 h-4;
+}
+
+.movie-detail-header {
+  @apply w-full max-w-6xl px-4 md:px-6 mb-4 md:mb-6;
+}
+
+.movie-detail-back-button {
+  @apply flex items-center gap-2 text-blue-500 font-medium transition-colors hover:text-blue-600 no-underline;
+}
+
+.movie-detail-container {
+  @apply flex flex-col lg:flex-row items-start w-full sm:w-2/3 gap-6 lg:gap-16 p-6 lg:p-12 mx-auto;
+}
+
+.movie-detail-figure {
+  @apply relative flex-shrink-0 w-full md:w-80 lg:w-96;
+}
+
+.movie-detail-image {
+  @apply w-full h-auto max-h-[500px] object-cover rounded-xl shadow-2xl;
+}
+
+.movie-detail-content {
+  @apply flex-1 pt-4 lg:pt-4 min-w-0 flex flex-col gap-6 md:gap-8;
+}
+
+.movie-detail-title {
+  @apply text-3xl md:text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight lg:leading-none;
+}
+
+.movie-detail-genres {
+  @apply flex items-center gap-2 flex-wrap;
+}
+
+.movie-detail-description {
+  @apply text-base md:text-lg lg:text-xl text-gray-700 leading-6 md:leading-7 mb-8 lg:mb-12;
 }

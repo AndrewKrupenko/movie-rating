@@ -1,6 +1,13 @@
-import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { StarIcon } from "@heroicons/react/24/solid";
 
-export default function MovieItem({ movie, onRemove, onUpdateRating, onEdit }) {
+import MovieRatingDisplay from "./MovieRatingDisplay";
+import MovieImage from "./MovieImage";
+import Tag from "./ui/Tag";
+import Skeleton from "../components/ui/Skeleton";
+
+export default function MovieItem({ movie, onEdit, onRemove, onUpdateRating }) {
   const handleUpdateRating = (rating) => {
     onUpdateRating(movie.id, rating);
   };
@@ -22,10 +29,14 @@ export default function MovieItem({ movie, onRemove, onUpdateRating, onEdit }) {
       </div>
       <div className="movie-item-content-wrapper">
         <div className="movie-item-title-wrapper">
-          <h3 className="movie-item-title">{movie.name}</h3>
+          <h3 className="movie-item-title">
+            <Link to={`/movie/${movie.id}`} className="movie-item-title-link">
+              {movie.name}
+            </Link>
+          </h3>
           <div className="movie-item-genres-wrapper">
             {movie.genres?.map((genre) => (
-              <GenreTag key={genre} genre={genre} />
+              <Tag key={genre} text={genre} />
             ))}
           </div>
         </div>
@@ -52,47 +63,12 @@ export default function MovieItem({ movie, onRemove, onUpdateRating, onEdit }) {
   );
 }
 
-function MovieRatingDisplay({ rating }) {
-  return (
-    <div className="movie-item-star-wrapper">
-      <StarIcon
-        className={`movie-item-star-rating-icon ${
-          rating ? "text-yellow-500" : "text-gray-500"
-        }`}
-      />
-      <div className="movie-item-star-content-wrapper">
-        {rating ? (
-          <span className="movie-item-star-content-rating-rated">{rating}</span>
-        ) : (
-          <span className="movie-item-star-content-rating-not-rated">-</span>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function NowPlayingBanner() {
   return (
     <div className="movie-item-theaters-banner">
       <span className="movie-item-theaters-banner-text">Now Playing</span>
     </div>
   );
-}
-
-function MovieImage({ image, name }) {
-  if (image) {
-    return <img src={image} className="movie-item-image" alt={name} />;
-  }
-
-  return (
-    <div className="movie-item-no-image">
-      <span className="movie-item-no-image-text">No image</span>
-    </div>
-  );
-}
-
-function GenreTag({ genre }) {
-  return <span className="movie-item-genre-tag">{genre}</span>;
 }
 
 function StarRating({ rating, movieName, onUpdateRating }) {
@@ -143,18 +119,24 @@ export function MovieItemSkeleton() {
   return (
     <div className="movie-item">
       <div className="movie-item-image-wrapper">
-        <div className="movie-item-image bg-gray-300 animate-pulse" />
+        <Skeleton variant="image" />
       </div>
       <div className="movie-item-content-wrapper">
         <div className="movie-item-title-wrapper">
-          <div className="skeleton" />
-          <div className="skeleton w-2/3" />
+          <Skeleton variant="title" className="w-3/4" />
+          <div className="movie-item-genres-wrapper">
+            <Skeleton className="w-16 h-6 rounded-full" />
+            <Skeleton className="w-20 h-6 rounded-full" />
+          </div>
         </div>
         <div className="movie-item-description-wrapper">
-          <div className="skeleton" />
+          <Skeleton variant="line" className="w-full" />
+          <Skeleton variant="line" className="w-2/3" />
         </div>
         <div className="movie-item-rating-wrapper">
-          <div className="skeleton w-20" />
+          <Skeleton className="w-24 h-4" />
+          <Skeleton className="w-32 h-6" />
+          <Skeleton className="w-16 h-8" />
         </div>
       </div>
     </div>
