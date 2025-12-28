@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const genres = [
   "Drama",
   "Crime",
@@ -10,35 +12,91 @@ const genres = [
   "Romance",
 ];
 
+const validateField = (name, value) => {
+  if (name === "name" && (!value || value.trim() === "")) {
+    return "Movie name is required";
+  }
+  if (name === "genres" && (!value || value.length === 0)) {
+    return "At least one genre is required";
+  }
+  return "";
+};
+
 export default function MovieForm({ movie, onSave, onCancel }) {
+  const [formData, setFormData] = useState({
+    id: movie?.id || null,
+    name: movie?.name || "",
+    description: movie?.description || "",
+    image: movie?.image || "",
+    inTheaters: movie?.inTheaters || false,
+    genres: movie?.genres || [],
+    rating: movie?.rating || null,
+  });
+  const [errors, setErrors] = useState({ name: "", genres: "" });
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
+    const nameError = validateField("name", formData.name);
+    const genresError = validateField("genres", formData.genres);
+
+    if (nameError || genresError) {
+      setErrors({ name: nameError, genres: genresError });
+      return;
+    }
 
     const data = {
-      ...Object.fromEntries(formData),
-      genres: formData.getAll("genres"),
-      id: movie?.id || formData.get("id"),
+      ...formData,
+      id: formData.id || Number(Date.now()),
     };
+
     onSave(data);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleGenresChange = (e) => {
+    const selectedOptions = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value,
+    );
+
+    setFormData((prev) => ({
+      ...prev,
+      genres: selectedOptions,
+    }));
+
+    if (errors.genres) {
+      setErrors((prev) => ({ ...prev, genres: "" }));
+    }
   };
 
   return (
     <div className="movie-form-container">
       <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={movie?.id || ""} />
         <div className="movie-form-input-wrapper">
           <label htmlFor="name" className="movie-form-label">
             Name
           </label>
           <input
             type="text"
-            required
             name="name"
+            value={formData.name}
+            onChange={handleInputChange}
             className="movie-form-input"
-            defaultValue={movie?.name || ""}
           />
+          <span className="movie-form-error">{errors.name}</span>
         </div>
         <div className="movie-form-input-wrapper">
           <label htmlFor="description" className="movie-form-label">
@@ -46,8 +104,9 @@ export default function MovieForm({ movie, onSave, onCancel }) {
           </label>
           <textarea
             name="description"
+            value={formData.description}
+            onChange={handleInputChange}
             className="movie-form-textarea"
-            defaultValue={movie?.description || ""}
           />
         </div>
         <div className="movie-form-input-wrapper">
@@ -57,9 +116,10 @@ export default function MovieForm({ movie, onSave, onCancel }) {
           <input
             type="url"
             name="image"
+            value={formData.image}
+            onChange={handleInputChange}
             className="movie-form-input"
             placeholder="https://example.com/image.jpg"
-            defaultValue={movie?.image || ""}
           />
         </div>
         <div className="movie-form-input-wrapper">
@@ -68,10 +128,10 @@ export default function MovieForm({ movie, onSave, onCancel }) {
           </label>
           <select
             name="genres"
+            value={formData.genres}
+            onChange={handleGenresChange}
             className="movie-form-select"
             multiple
-            required
-            defaultValue={movie?.genres || []}
           >
             {genres.map((genre) => (
               <option key={genre} value={genre}>
@@ -79,14 +139,16 @@ export default function MovieForm({ movie, onSave, onCancel }) {
               </option>
             ))}
           </select>
+          <span className="movie-form-error">{errors.genres}</span>
         </div>
         <div className="movie-form-input-wrapper">
           <label className="movie-form-checkbox-label">
             <input
               type="checkbox"
               name="inTheaters"
+              checked={formData.inTheaters}
+              onChange={handleInputChange}
               className="movie-form-checkbox"
-              defaultChecked={movie?.inTheaters || false}
             />
             <span>In Theaters</span>
           </label>
@@ -100,7 +162,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
             Cancel
           </button>
           <button type="submit" className="btn btn-primary">
-            {movie?.id ? "Save" : "Create"}
+            {formData.id ? "Save" : "Create"}
           </button>
         </div>
       </form>
