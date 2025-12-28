@@ -69,7 +69,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
   const handleGenresChange = (e) => {
     const selectedOptions = Array.from(
       e.target.selectedOptions,
-      (option) => option.value,
+      (option) => option.value
     );
 
     setFormData((prev) => ({

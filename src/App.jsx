@@ -10,6 +10,17 @@ export default function App() {
   const [currentMovie, setCurrentMovie] = useState(null);
   const [showMovieForm, setShowMovieForm] = useState(false);
 
+  const validRatings = movies
+    .filter((movie) => Number.isFinite(movie.rating))
+    .map((movie) => movie.rating);
+  const averageRating = validRatings.length
+    ? (
+        validRatings.reduce((acc, rating) => acc + rating, 0) /
+        validRatings.length
+      ).toFixed(1)
+    : "N/A";
+  const totalMovies = movies.length;
+
   const updateRating = (id, rating) => {
     setMovies((prevMovies) =>
       prevMovies.map((movie) =>
@@ -88,6 +99,15 @@ export default function App() {
         />
       </Modal>
       <div className="movie-actions-list-wrapper">
+        <div className="movie-actions-list-info">
+          <span>
+            <strong>Total Movies:</strong> {totalMovies}
+          </span>
+          <span>|</span>
+          <span>
+            <strong>Average Rating:</strong> {averageRating}
+          </span>
+        </div>
         <div className="movie-actions-list-actions">
           <button className="btn btn-secondary" onClick={removeRatings}>
             Remove Ratings
