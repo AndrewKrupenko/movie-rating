@@ -1,32 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+
+import { useModal } from "../../hooks/useModal";
 
 export default function Modal({ title, isOpen, onClose, children }) {
   const modalRef = useRef(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
+  useModal(modalRef, onClose, isOpen);
 
   if (!isOpen) {
     return null;

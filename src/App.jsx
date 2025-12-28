@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import MovieItem, { MovieItemSkeleton } from "./components/MovieItem";
 import Modal from "./components/ui/Modal";
 import MovieForm from "./components/MovieForm";
+import { useFetch } from "./hooks/useFetch";
 import { getMovies } from "./services/movies-service";
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
   const [currentMovie, setCurrentMovie] = useState(null);
   const [showMovieForm, setShowMovieForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: movies,
+    setData: setMovies,
+    isLoading,
+  } = useFetch(getMovies, []);
 
   const validRatings = movies
     .filter((movie) => Number.isFinite(movie.rating))
@@ -21,15 +25,6 @@ export default function App() {
       ).toFixed(1)
     : "N/A";
   const totalMovies = movies.length;
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      const movies = await getMovies();
-      setMovies(movies);
-      setIsLoading(false);
-    };
-    fetchMovies();
-  }, []);
 
   const updateRating = (id, rating) => {
     setMovies((prevMovies) =>
