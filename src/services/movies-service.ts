@@ -1,6 +1,6 @@
-import { ALL_MOVIES } from "../data/movies";
+import { ALL_MOVIES, Movie } from "../data/movies";
 
-export async function getMovies() {
+export async function getMovies(): Promise<Movie[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(ALL_MOVIES.items);
@@ -8,10 +8,12 @@ export async function getMovies() {
   });
 }
 
-export async function getMovie(movieId) {
+export async function getMovie(movieId: string): Promise<Movie> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const movieDetails = ALL_MOVIES.items.find(movie => movie.id === parseInt(movieId, 10));
+      const movieDetails = ALL_MOVIES.items.find(
+        (movie) => movie.id === parseInt(movieId, 10)
+      );
       if (movieDetails) {
         resolve(movieDetails);
       } else {

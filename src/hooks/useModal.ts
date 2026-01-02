@@ -1,16 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, RefObject } from "react";
 
-export function useModal(ref, onClose, isActive = true) {
+export function useModal(
+  ref: RefObject<HTMLElement | null>,
+  onClose: () => void,
+  isActive: boolean = true
+): void {
   useEffect(() => {
     if (!isActive) return;
 
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        ref.current &&
+        event.target &&
+        !ref.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
 
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
       }

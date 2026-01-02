@@ -1,4 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
+
+import { Movie } from "../data/movies";
 
 const genres = [
   "Drama",
@@ -12,18 +14,30 @@ const genres = [
   "Romance",
 ];
 
-const validateField = (name, value) => {
-  if (name === "name" && (!value || value.trim() === "")) {
+const validateField = (name: string, value: string | string[]): string => {
+  if (
+    name === "name" &&
+    (!value || (typeof value === "string" && value.trim() === ""))
+  ) {
     return "Movie name is required";
   }
-  if (name === "genres" && (!value || value.length === 0)) {
+  if (
+    name === "genres" &&
+    (!value || (Array.isArray(value) && value.length === 0))
+  ) {
     return "At least one genre is required";
   }
   return "";
 };
 
-export default function MovieForm({ movie, onSave, onCancel }) {
-  const nameInputRef = useRef(null);
+type MovieFormProps = {
+  movie?: Movie | null;
+  onSave: (movie: Movie) => void;
+  onCancel: () => void;
+};
+
+export default function MovieForm({ movie, onSave, onCancel }: MovieFormProps) {
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     id: movie?.id || null,
@@ -34,7 +48,10 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     genres: movie?.genres || [],
     rating: movie?.rating || null,
   });
-  const [errors, setErrors] = useState({ name: "", genres: "" });
+  const [errors, setErrors] = useState<{ name: string; genres: string }>({
+    name: "",
+    genres: "",
+  });
 
   useEffect(() => {
     if (nameInputRef.current) {
@@ -42,7 +59,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const nameError = validateField("name", formData.name);
@@ -53,7 +70,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
       return;
     }
 
-    const data = {
+    const data: Movie = {
       ...formData,
       id: formData.id || Number(Date.now()),
     };
@@ -61,23 +78,26 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     onSave(data);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type } = e.target;
+    const checked = "checked" in e.target ? e.target.checked : false;
 
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    if (errors[name]) {
+    if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const handleGenresChange = (e) => {
+  const handleGenresChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(
       e.target.selectedOptions,
-      (option) => option.value
+      (option) => option.value,
     );
 
     setFormData((prev) => ({

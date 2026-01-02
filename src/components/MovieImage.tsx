@@ -1,4 +1,14 @@
-export default function MovieImage({ image, name, variant = "item" }) {
+type MovieImageProps = {
+  image: string;
+  name: string;
+  variant?: "item" | "detail";
+};
+
+export default function MovieImage({
+  image,
+  name,
+  variant = "item",
+}: MovieImageProps) {
   const variantClasses = {
     item: "movie-item-image",
     detail: "movie-detail-image",

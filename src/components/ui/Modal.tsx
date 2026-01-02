@@ -1,10 +1,22 @@
-import { useRef } from "react";
+import { useRef, ReactNode } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
 import { useModal } from "../../hooks/useModal";
 
-export default function Modal({ title, isOpen, onClose, children }) {
-  const modalRef = useRef(null);
+type ModalProps = {
+  title?: string;
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};
+
+export default function Modal({
+  title,
+  isOpen,
+  onClose,
+  children,
+}: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useModal(modalRef, onClose, isOpen);
 

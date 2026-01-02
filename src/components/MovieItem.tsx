@@ -5,10 +5,23 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import MovieRatingDisplay from "./MovieRatingDisplay";
 import MovieImage from "./MovieImage";
 import Tag from "./ui/Tag";
-import Skeleton from "../components/ui/Skeleton";
+import Skeleton from "./ui/Skeleton";
+import { Movie } from "../data/movies";
 
-export default function MovieItem({ movie, onEdit, onRemove, onUpdateRating }) {
-  const handleUpdateRating = (rating) => {
+type MovieItemProps = {
+  movie: Movie;
+  onEdit: (id: number) => void;
+  onRemove: (id: number) => void;
+  onUpdateRating: (id: number, rating: number | null) => void;
+};
+
+export default function MovieItem({
+  movie,
+  onEdit,
+  onRemove,
+  onUpdateRating,
+}: MovieItemProps) {
+  const handleUpdateRating = (rating: number) => {
     onUpdateRating(movie.id, rating);
   };
 
@@ -71,7 +84,13 @@ function NowPlayingBanner() {
   );
 }
 
-function StarRating({ rating, movieName, onUpdateRating }) {
+type StarRatingProps = {
+  rating: number | null;
+  movieName: string;
+  onUpdateRating: (rating: number) => void;
+};
+
+function StarRating({ rating, movieName, onUpdateRating }: StarRatingProps) {
   return (
     <div className="movie-item-star-icon-wrapper">
       {[1, 2, 3, 4, 5].map((star) => (
@@ -94,7 +113,13 @@ function StarRating({ rating, movieName, onUpdateRating }) {
   );
 }
 
-function MovieActions({ movieName, onEdit, onRemove }) {
+type MovieActionsProps = {
+  movieName: string;
+  onEdit: () => void;
+  onRemove: () => void;
+};
+
+function MovieActions({ movieName, onEdit, onRemove }: MovieActionsProps) {
   return (
     <div className="movie-item-actions-list-wrapper">
       <button

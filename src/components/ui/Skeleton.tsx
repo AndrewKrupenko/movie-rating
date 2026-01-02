@@ -1,8 +1,25 @@
+type Variant =
+  | "default"
+  | "text"
+  | "text-sm"
+  | "text-lg"
+  | "text-xl"
+  | "title"
+  | "button"
+  | "avatar"
+  | "image"
+  | "line";
+
+type SkeletonProps = React.HTMLAttributes<HTMLDivElement> & {
+  className?: string;
+  variant?: Variant;
+};
+
 export default function Skeleton({
   className = "",
   variant = "default",
   ...props
-}) {
+}: SkeletonProps) {
   const baseClasses = "bg-gray-200 animate-pulse";
 
   const variants = {

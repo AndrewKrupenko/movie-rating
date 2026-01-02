@@ -3,30 +3,43 @@ import { useState } from "react";
 import MovieItem, { MovieItemSkeleton } from "../components/MovieItem";
 import Modal from "../components/ui/Modal";
 import MovieForm from "../components/MovieForm";
-import { useFetch } from "../hooks/useFetch";
 import { getMovies } from "../services/movies-service";
+import { Movie } from "../data/movies";
+import { useFetch } from "../hooks/useFetch";
 
 export default function HomePage() {
-  const [currentMovie, setCurrentMovie] = useState(null);
+  const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
   const [showMovieForm, setShowMovieForm] = useState(false);
+
   const {
     data: movies,
     setData: setMovies,
     isLoading,
-  } = useFetch(getMovies, []);
+  } = useFetch<Movie[]>(getMovies, []);
 
   const validRatings = movies
-    .filter((movie) => Number.isFinite(movie.rating))
-    .map((movie) => movie.rating);
+    .filter((movie) => movie.rating !== null && Number.isFinite(movie.rating))
+    .map((movie) => movie.rating as number);
+
   const averageRating = validRatings.length
     ? (
         validRatings.reduce((acc, rating) => acc + rating, 0) /
         validRatings.length
       ).toFixed(1)
     : "N/A";
+
   const totalMovies = movies.length;
 
-  const updateRating = (id, rating) => {
+  const hideForm = () => {
+    setShowMovieForm(false);
+    setCurrentMovie(null);
+  };
+
+  const showForm = () => {
+    setShowMovieForm(true);
+  };
+
+  const updateRating = (id: number, rating: number | null) => {
     setMovies((prevMovies) =>
       prevMovies.map((movie) =>
         movie.id === id ? { ...movie, rating } : movie,
@@ -34,26 +47,20 @@ export default function HomePage() {
     );
   };
 
-  const removeMovie = (id) => {
+  const removeMovie = (id: number) => {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.id !== id));
   };
 
-  const editMovie = (id) => {
+  const editMovie = (id: number) => {
     const movie = movies.find((movie) => movie.id === id);
-    setCurrentMovie(movie);
-    showForm();
-  };
 
-  const saveMovie = (data) => {
-    const isExisting = movies.find((movie) => movie.id === data.id);
-    if (isExisting) {
-      updateMovie(data);
-    } else {
-      addMovie(data);
+    if (movie) {
+      setCurrentMovie(movie);
+      showForm();
     }
   };
 
-  const updateMovie = (data) => {
+  const updateMovie = (data: Movie) => {
     setMovies((prevMovies) =>
       prevMovies.map((m) => {
         if (m.id === data.id) {
@@ -65,18 +72,19 @@ export default function HomePage() {
     hideForm();
   };
 
-  const addMovie = (data) => {
+  const addMovie = (data: Movie) => {
     setMovies((prevMovies) => [...prevMovies, data]);
     hideForm();
   };
 
-  const hideForm = () => {
-    setShowMovieForm(false);
-    setCurrentMovie(null);
-  };
+  const saveMovie = (data: Movie) => {
+    const isExisting = movies.find((movie) => movie.id === data.id);
 
-  const showForm = () => {
-    setShowMovieForm(true);
+    if (isExisting) {
+      updateMovie(data);
+    } else {
+      addMovie(data);
+    }
   };
 
   const removeRatings = () => {

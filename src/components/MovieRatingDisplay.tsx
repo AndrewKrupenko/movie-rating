@@ -1,6 +1,12 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 
-export default function MovieRatingDisplay({ rating }) {
+type MovieRatingDisplayProps = {
+  rating: number | null;
+};
+
+export default function MovieRatingDisplay({
+  rating,
+}: MovieRatingDisplayProps) {
   return (
     <div className="movie-item-star-wrapper">
       <StarIcon

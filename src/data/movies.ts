@@ -1,4 +1,18 @@
-export const ALL_MOVIES = {
+export type Movie = {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  rating: number | null;
+  genres: string[];
+  inTheaters: boolean;
+};
+
+export type MoviesData = {
+  items: Movie[];
+};
+
+export const ALL_MOVIES: MoviesData = {
   items: [
     {
       id: 1,

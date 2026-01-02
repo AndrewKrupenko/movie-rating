@@ -2,15 +2,19 @@ import { useParams, Link } from "react-router";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 import { getMovie } from "../services/movies-service";
-import { useFetch } from "../hooks/useFetch";
 import MovieRatingDisplay from "../components/MovieRatingDisplay";
 import MovieImage from "../components/MovieImage";
 import Tag from "../components/ui/Tag";
+import { Movie } from "../data/movies";
 import Skeleton from "../components/ui/Skeleton";
+import { useFetch } from "../hooks/useFetch";
 
 export default function MovieDetailPage() {
-  const { id } = useParams();
-  const { data: movie, isLoading } = useFetch(() => getMovie(id), null);
+  const { id } = useParams<{ id: string }>();
+  const { data: movie, isLoading } = useFetch<Movie | null>(
+    () => getMovie(id!),
+    null,
+  );
 
   return (
     <>
@@ -22,7 +26,7 @@ export default function MovieDetailPage() {
       </div>
       {isLoading ? (
         <MovieDetailSkeleton />
-      ) : (
+      ) : movie ? (
         <div className="movie-detail-container">
           <div className="movie-detail-figure">
             <>
@@ -43,6 +47,10 @@ export default function MovieDetailPage() {
             </div>
             <p className="movie-detail-description">{movie.description}</p>
           </div>
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <p>Movie not found</p>
         </div>
       )}
     </>

@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 
-export function useFetch(fetchFunction, initialValue) {
-  const [data, setData] = useState(initialValue);
+type UseFetchReturn<T> = {
+  data: T;
+  setData: React.Dispatch<React.SetStateAction<T>>;
+  isLoading: boolean;
+};
+
+export function useFetch<T>(
+  fetchFunction: () => Promise<T>,
+  initialValue: T,
+): UseFetchReturn<T> {
+  const [data, setData] = useState<T>(initialValue);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -22,5 +31,9 @@ export function useFetch(fetchFunction, initialValue) {
     };
   }, [fetchFunction]);
 
-  return { data, setData, isLoading };
+  return {
+    data,
+    setData,
+    isLoading,
+  };
 }
